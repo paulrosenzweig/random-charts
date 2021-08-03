@@ -9,36 +9,14 @@ const originalStatuses = [
   "Divorced",
   "Separated",
 ];
-const statuses = [
-  "Never married",
-  "Now married",
-  // "Widowed",
-  // "Divorced",
-  // "Separated",
-  "No longer married",
-];
+const statuses = ["Never married", "Now married", "No longer married"];
 const width = 400;
-const height = 500;
+const height = 700;
 vegaEmbed(elem, {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   data: {
-    // url: "data.csv"
-    values: `"Age","Sex","Total","Now married","Widowed","Divorced","Separated","Never married"
-"15–19","Male","10903653","0.9","0.0","0.0","0.1","99.0"
-"20–34","Male","34113759","25.7","0.1","2.5","0.9","70.8"
-"35–44","Male","20920715","59.5","0.4","9.8","2.2","28.2"
-"45–54","Male","20155362","64.1","1.0","15.2","2.5","17.2"
-"55–64","Male","20491435","65.3","2.5","17.1","2.1","13.0"
-"65+","Male","24044281","68.6","11.0","12.8","1.3","6.2"
-"15–19","Female","10449871","1.1","0.0","0.1","0.1","98.7"
-"20–34","Female","32933396","32.8","0.2","3.6","1.6","61.8"
-"35–44","Female","20994130","61.0","0.9","12.2","3.3","22.7"
-"45–54","Female","20707745","62.4","2.5","18.1","3.3","13.7"
-"55–64","Female","21976678","60.2","7.2","19.9","2.5","10.2"
-"65+","Female","30029747","45.1","31.6","16.2","1.2","6.0"
-`,
+    url: "data.csv",
     format: {
-      type: "csv",
       parse: Object.fromEntries(originalStatuses.map((s) => [s, "number"])),
     },
   },
@@ -49,7 +27,7 @@ vegaEmbed(elem, {
     },
     { fold: statuses },
   ],
-  config: { concat: { spacing: 0 } },
+  config: { concat: { spacing: -1 } },
   hconcat: ["Male", "Female"].map((sex, index) => ({
     mark: "bar",
     width,
@@ -61,7 +39,15 @@ vegaEmbed(elem, {
         type: "ordinal",
         sort: "-y",
         scale: { padding: 0 },
-        axis: { orient: index === 0 ? "left" : "right" },
+        axis: {
+          orient: index === 0 ? "left" : "right",
+          ticks: false,
+          grid: true,
+          tickBand: "extent",
+          gridColor: "gray",
+          gridOpacity: 0.5,
+          zindex: 1,
+        },
       },
       order: { field: "color_value_sort_index", type: "quantitative" },
       x: {
@@ -71,7 +57,9 @@ vegaEmbed(elem, {
         axis: {
           title: sex,
           zindex: 1,
-          tickCount: 50,
+          values: Array(10)
+            .fill(0)
+            .map((_, i) => 10 * (i + 1)),
           gridColor: "gray",
           gridOpacity: 0.5,
           ticks: false,
