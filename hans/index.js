@@ -15,13 +15,26 @@ vegaEmbed(elem, {
     },
   ],
   transform: [{ filter: { field: "year", equal: { expr: "year" } } }],
-  mark: "circle",
+  mark: { type: "circle", tooltip: true },
   width: 400,
   height: 400,
   encoding: {
-    x: { field: "life_expect", type: "quantitative", scale: { zero: false } },
-    y: { field: "fertility", type: "quantitative", scale: { zero: false } },
-    size: { field: "pop", type: "quantitative" },
-    color: { field: "country", type: "ordinal" },
+    x: {
+      field: "life_expect",
+      type: "quantitative",
+      scale: { domain: [30, 90] },
+    },
+    y: {
+      field: "fertility",
+      type: "quantitative",
+      scale: { zero: false, domain: [1, 9] },
+    },
+    size: {
+      field: "pop",
+      type: "quantitative",
+      legend: false,
+      scale: { domain: [1000000, 1500000000] },
+    },
+    color: { field: "country", type: "nominal" },
   },
 });
